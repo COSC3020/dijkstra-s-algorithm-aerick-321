@@ -24,6 +24,6 @@ inefficient.
 What is the big $\Theta$ complexity of your implementation? Add your
 answer, including your reasoning, to this markdown file.
 
-For each iteration all nodes are checked which is n(n+1)/2 comparisions and that means the complexity is $O(n^)$.
+Because I used a priority queue the enqueue operation sorts which is O(nlogn) and because you have to go to each node n times ( the number of nodes) the total complexity is O(n^2logn).
 
 Used DJ reflexsive's test code as a base then used Chat Gpt to help modify to my code “I certify that I have listed all sources used to complete this exercise, including the use of any Large Language Models. All of the work is my own, except where stated otherwise. I am aware that plagiarism carries severe penalties and that if plagiarism is suspected, charges may be filed against me without prior notice.”
