@@ -1,3 +1,23 @@
+class PriorityQueue {
+    constructor() {
+        this.items = [];
+    }
+
+    enqueue(element, priority) {
+        this.items.push({ element, priority });
+        this.items.sort((a, b) => a.priority - b.priority); // Sort by priority (ascending)
+    }
+
+    dequeue() {
+        return this.items.shift(); // Remove and return the item with the highest priority (lowest value)
+    }
+
+    isEmpty() {
+        return this.items.length === 0;
+    }
+}
+
+
 export function dijkstra(graph, sourceNode) {
     let dist = {};
      for (let node in graph) {
