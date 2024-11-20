@@ -10,19 +10,19 @@ function dijkstra(graph, sourceNode) {
     queue.enqueue(sourceNode, 0);
     
     while (!queue.isEmpty()){
-        let u = queue.dequeue();
+       let { element: u } = queue.dequeue();
         if (visited.has(u)) {
            continue;
         }
-        
         visited.add(u);
+        
         for (let next of graph[u]){
             let weight = graph[u][next]; 
             let newdist = dist[u] + weight;
             
             if (newdist < dist[next]){
                 dist[next] = newdist;
-                queue.enqueue(next, dist[next]);
+                queue.enqueue(next, newdist);
             }
         }
     }
