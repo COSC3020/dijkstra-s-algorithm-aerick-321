@@ -7,11 +7,12 @@ function dijkstra(graph, sourceNode) {
     while (!queue.isEmpty()){
         let u = queue.dequeue();
         if (u in visited) {
-            skip;
+           continue;
         }
-        v.push(u);
-        for (let next = 0; graph.length(current); next++){
-             newdist = dist [u] + graph.length(u, next);
+        visited.add(u);
+        for (let next of graph[u]){
+            let weight = graph[u][next]; 
+            let newdist = dist[u] + weight;
             if (newdist < dist[next]){
                 dist[next] = newdist;
                 queue.enqueue(next, dist[next]);
