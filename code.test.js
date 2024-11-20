@@ -10,18 +10,16 @@ class GraphNode {
 
 // Helper to create graphs in adjacency list format
 function createGraph(nodes, edges) {
-    let graph = [];
+    let graph = {};
     for (let i = 0; i < nodes; i++) {
-        let neighbors = new Array(nodes).fill(0); // Initialize no edges
-        edges
-            .filter(([src, dest]) => src === i) // Filter edges for this node
-            .forEach(([src, dest, weight]) => {
-                neighbors[dest] = weight; // Set edge weight
-            });
-        graph.push(new GraphNode(i, neighbors));
+        graph[i] = {}; // Initialize an empty adjacency list for the node
     }
+    edges.forEach(([src, dest, weight]) => {
+        graph[src][dest] = weight; // Add edge to adjacency list
+    });
     return graph;
 }
+
 
 /* Test Cases */
 const testCases = [
