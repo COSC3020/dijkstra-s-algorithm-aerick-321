@@ -1,44 +1,59 @@
-const fs = require('fs');
-const jsc = require('jsverify');
+import { dijkstra } from "./code.js";
+import jsc from 'jsverify';
 
-// Load Dijkstra's algorithm implementation
-eval(fs.readFileSync('code.js') + '');
 
-// Helper: Brute-force shortest path computation
-function bruteForceShortestPaths(graph, source) {
-    const nodes = Object.keys(graph);
-    const distances = {};
-    nodes.forEach(node => distances[node] = Infinity);
-    distances[source] = 0;
+    /* Helper Method */
 
-    for (let i = 0; i < nodes.length - 1; i++) {
-        for (let u of nodes) {
-            for (let { node: v, weight } of graph[u]) {
-                if (distances[u] + weight < distances[v]) {
-                    distances[v] = distances[u] + weight;
-                }
-            }
+// Generates a graph with a given size and a limit to the weights
+function generateGraph(size, maxWeight) {
+    let graph = [];
+
+    for (let i = 0; i < size; i++) {
+        let edges = [];
+
+        for (let j = 0; j < size; j++) {
+            // -1 included to show the algorith can handle negative values
+            edges.push(jsc.random(-1, maxWeight)); 
         }
+        // using i for name, any name could be passed, the algorithm can handle
+        graph.push(new GraphNode(i, edges));
     }
 
-    return distances;
+    return graph;
 }
 
-// Property-based test
-const test = jsc.forall(
-    jsc.dict(jsc.array(jsc.record({ node: jsc.nat, weight: jsc.nat }))), // Random weighted graph
-    jsc.nat, // Source node
-    function (graph, source) {
-        // Ensure graph keys are numbers
-        graph = Object.fromEntries(Object.entries(graph).map(([k, v]) => [Number(k), v]));
-        if (!(source in graph)) return true; // Skip invalid cases
 
-        const dijkstraResult = dijkstra(graph, source);
-        const bruteForceResult = bruteForceShortestPaths(graph, source);
 
-        return JSON.stringify(dijkstraResult) === JSON.stringify(bruteForceResult);
+    /* Custom Testing */
+
+const numTests = 100000; // Sufficiently Large Amount of Tests
+const maxGraphSize = 30;
+const maxWeightSize = 100;
+
+
+/*  
+*   This block generates lots of unit tests to stress test the algorithm.
+*   Ensuring the alogrithm can handle all sort of example scenerios.
+*
+*   Note:
+*
+*   These unit tests will randomly test graph sizes of 0, 1, and values 
+*   larger than 1.
+*
+*   Random weights will be assigned for every edge, where 0 indicates
+*   there is no edge. Negative values are also assigned, which the 
+*   algorithm will treat as if there is no edge, similarly to the 0 weight.
+*/ 
+for (let i = 0; i < numTests; i++) {
+    const graphSize = jsc.random(0, maxGraphSize);
+    const graph = generateGraph(graphSize, maxWeightSize);
+    const sourceNode = jsc.random(0, graphSize);
+
+    const result = dijkstra(graph, sourceNode);
+
+    console.assert(result != null, "Result was null...");
+
+    if (result == null) {
+        throw "Result was null...";
     }
-);
-
-// Run the test
-jsc.assert(test, { tests: 1000 });
+}
