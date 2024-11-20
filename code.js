@@ -16,7 +16,7 @@ function dijkstra(graph, sourceNode) {
         }
         visited.add(u);
         
-        for (let next of graph[u]){
+        for (let next in graph[u]){
             let weight = graph[u][next]; 
             let newdist = dist[u] + weight;
             
