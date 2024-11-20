@@ -1,4 +1,4 @@
-function dijkstra(graph, sourceNode) {
+export function dijkstra(graph, sourceNode) {
     let dist = {};
      for (let node in graph) {
         dist[node] = Infinity; // Set all distances to infinity
