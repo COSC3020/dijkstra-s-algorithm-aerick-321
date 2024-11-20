@@ -1,59 +1,78 @@
 import { dijkstra } from "./code.js";
-import jsc from 'jsverify';
 
-
-    /* Helper Method */
-
-// Generates a graph with a given size and a limit to the weights
-function generateGraph(size, maxWeight) {
-    let graph = [];
-
-    for (let i = 0; i < size; i++) {
-        let edges = [];
-
-        for (let j = 0; j < size; j++) {
-            // -1 included to show the algorith can handle negative values
-            edges.push(jsc.random(-1, maxWeight)); 
-        }
-        // using i for name, any name could be passed, the algorithm can handle
-        graph.push(new GraphNode(i, edges));
+/* Custom Graphs for Testing */
+class GraphNode {
+    constructor(name, edges) {
+        this.name = name; // Node name or index
+        this.edges = edges; // Array of edge weights
     }
+}
 
+// Helper to create graphs in adjacency list format
+function createGraph(nodes, edges) {
+    let graph = [];
+    for (let i = 0; i < nodes; i++) {
+        let neighbors = new Array(nodes).fill(0); // Initialize no edges
+        edges
+            .filter(([src, dest]) => src === i) // Filter edges for this node
+            .forEach(([src, dest, weight]) => {
+                neighbors[dest] = weight; // Set edge weight
+            });
+        graph.push(new GraphNode(i, neighbors));
+    }
     return graph;
 }
 
+/* Test Cases */
+const testCases = [
+    {
+        graph: createGraph(4, [
+            [0, 1, 1],
+            [0, 2, 4],
+            [1, 2, 2],
+            [1, 3, 5],
+            [2, 3, 1],
+        ]),
+        sourceNode: 0,
+        expected: { 0: 0, 1: 1, 2: 3, 3: 4 },
+    },
+    {
+        graph: createGraph(1, []), // Single node
+        sourceNode: 0,
+        expected: { 0: 0 },
+    },
+    {
+        graph: createGraph(4, []), // Disconnected graph
+        sourceNode: 0,
+        expected: { 0: 0, 1: Infinity, 2: Infinity, 3: Infinity },
+    },
+];
 
+/* Test Runner */
+function runTests() {
+    let passed = 0;
 
-    /* Custom Testing */
+    testCases.forEach(({ graph, sourceNode, expected }, index) => {
+        const result = dijkstra(graph, sourceNode);
 
-const numTests = 100000; // Sufficiently Large Amount of Tests
-const maxGraphSize = 30;
-const maxWeightSize = 100;
+        // Compare results
+        const match = Object.keys(expected).every(
+            (node) => result[node] === expected[node]
+        );
 
+        if (match) {
+            console.log(`Test case ${index + 1}: Passed`);
+            passed++;
+        } else {
+            console.error(`Test case ${index + 1}: Failed`);
+            console.error(`Expected:`, expected);
+            console.error(`Got:`, result);
+        }
+    });
 
-/*  
-*   This block generates lots of unit tests to stress test the algorithm.
-*   Ensuring the alogrithm can handle all sort of example scenerios.
-*
-*   Note:
-*
-*   These unit tests will randomly test graph sizes of 0, 1, and values 
-*   larger than 1.
-*
-*   Random weights will be assigned for every edge, where 0 indicates
-*   there is no edge. Negative values are also assigned, which the 
-*   algorithm will treat as if there is no edge, similarly to the 0 weight.
-*/ 
-for (let i = 0; i < numTests; i++) {
-    const graphSize = jsc.random(0, maxGraphSize);
-    const graph = generateGraph(graphSize, maxWeightSize);
-    const sourceNode = jsc.random(0, graphSize);
-
-    const result = dijkstra(graph, sourceNode);
-
-    console.assert(result != null, "Result was null...");
-
-    if (result == null) {
-        throw "Result was null...";
-    }
+    console.log(`${passed}/${testCases.length} tests passed.`);
 }
+
+// Run the tests
+runTests();
+
