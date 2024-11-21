@@ -24,6 +24,6 @@ inefficient.
 What is the big $\Theta$ complexity of your implementation? Add your
 answer, including your reasoning, to this markdown file.
 
-Because I used a priority queue the enqueue operation sorts which is O(nlogn) and because you have to go to each node n times ( the number of nodes) the total complexity is O(n^2logn).
+V is the number of vertices in a graph. The while loop runs V times as each node is dequeued. In the main loop for each node you check all its neighbors which could go over all the edges E. Each enqueue operation is O(V) and then there is E edges total so the final complexity is O(V*E).
 
 Used DJ reflexsive's test code as a base then used Chat Gpt to help modify to my code “I certify that I have listed all sources used to complete this exercise, including the use of any Large Language Models. All of the work is my own, except where stated otherwise. I am aware that plagiarism carries severe penalties and that if plagiarism is suspected, charges may be filed against me without prior notice.”
