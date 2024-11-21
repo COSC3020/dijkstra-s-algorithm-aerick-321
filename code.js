@@ -3,11 +3,27 @@ class PriorityQueue {
         this.items = [];
     }
     enqueue(element, priority) {
-        this.items.push({ element, priority });
+        function findInsertionIndex(list, priority) {
+        let start = 0;
+        let end = list.length;
+        while (start < end) {
+            let mid = Math.floor((start + end) / 2);
+            if (list[mid].priority < priority) {
+                start = mid + 1; // Move right
+            } else {
+                end = mid; // Move left
+            }
+        }
+        return start;
+        }
+        const index = findInsertionIndex(this.items, priority);
+        this.items.splice(index, 0, { element, priority });
     }
+    
     dequeue() {
         return this.items.shift(); // Remove and return the item with the highest priority (lowest value)
     }
+    
     isEmpty() {
         return this.items.length === 0;
     }
