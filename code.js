@@ -4,7 +4,6 @@ class PriorityQueue {
     }
     enqueue(element, priority) {
         this.items.push({ element, priority });
-        this.items.sort((a, b) => a.priority - b.priority); // Sort by priority (ascending)
     }
     dequeue() {
         return this.items.shift(); // Remove and return the item with the highest priority (lowest value)
