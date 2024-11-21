@@ -1,14 +1,6 @@
 import { dijkstra } from "./code.js";
 
 /* Custom Graphs for Testing */
-class GraphNode {
-    constructor(name, edges) {
-        this.name = name; // Node name or index
-        this.edges = edges; // Array of edge weights
-    }
-}
-
-// Helper to create graphs in adjacency list format
 function createGraph(nodes, edges) {
     let graph = {};
     for (let i = 0; i < nodes; i++) {
@@ -19,7 +11,6 @@ function createGraph(nodes, edges) {
     });
     return graph;
 }
-
 
 /* Test Cases */
 const testCases = [
@@ -73,4 +64,3 @@ function runTests() {
 
 // Run the tests
 runTests();
-
