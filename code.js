@@ -2,21 +2,23 @@ class PriorityQueue {
     constructor() {
         this.items = [];
     }
-    enqueue(element, priority) {
-        function findInsertionIndex(list, priority) {
+
+    findInsertionIndex(priority) {
         let start = 0;
-        let end = list.length;
+        let end = this.items.length;
+
         while (start < end) {
-            let mid = Math.floor((start + end) / 2);
-            if (list[mid].priority < priority) {
+            const mid = Math.floor((start + end) / 2);
+            if (this.items[mid].priority < priority) {
                 start = mid + 1; // Move right
             } else {
                 end = mid; // Move left
             }
         }
         return start;
-        }
-        const index = findInsertionIndex(this.items, priority);
+    }
+    enqueue(element, priority) {
+         const index = this.findInsertionIndex(priority);
         this.items.splice(index, 0, { element, priority });
     }
     
